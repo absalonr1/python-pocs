@@ -53,17 +53,34 @@ for path in pathArray:
         svcName = svcName.lstrip().rstrip()
         print("Service NAME: "+ svcName)
 
-        subPrc = subprocess.Popen(['jq','(.data[] | select (.id == '+svcId+' ) )','services-sub.json'], stdout = subprocess.PIPE) 
-        subPrc2 = subprocess.Popen(['jq','.name'], stdin=subPrc.stdout, stdout = subprocess.PIPE) 
-        svcName = str(subPrc2.communicate()[0].decode("utf-8"))
-        svcName = svcName.lstrip().rstrip()
-        print("Service NAME: "+ svcName)
+        # quitar comillas dobles al inicio y al final
+        path = path[1:len(path)-1]
 
-        #jq '.items[] | select ( .status.loadBalancer.ingress[].hostname == "internal-k8s-ingresspyme2c-deffada9e5-1182658737.us-west-2.elb.amazonaws.com" ) ' ingress.json  | jq '. | select (.spec.rules[].http.paths[].path == "/api/pyme2c/compensations/v1/*" )'| jq '.spec.rules[].http.paths[0].backend.service.name'
-        subPrc = subprocess.Popen(['jq','.items[] | select ( .status.loadBalancer.ingress[].hostname == '+albDNS+' )','ingress.json'], stdout = subprocess.PIPE) 
-        subPrc2 = subprocess.Popen(['jq','. | select (.spec.rules[].http.paths[].path == "/api/pyme2c/compensations/v1/*" )'], stdin=subPrc.stdout, stdout = subprocess.PIPE) 
-        subPrc3 = subprocess.Popen(['jq','.spec.rules[].http.paths[0].backend.service.name'], stdin=subPrc2.stdout, stdout = subprocess.PIPE) 
-        k8sSvcName = str(subPrc3.communicate()[0].decode("utf-8"))
+        path1=""
+        path2=""
+        path3=""
+        path4=""
+
+        if(path.endswith("/")):
+            path1=path
+            path2=path+"*"
+            path3=path[0:len(path)-1]+"*"
+            path4=path[0:len(path)-1]
+        else:
+            path1=path
+            path2=path+"*"
+            path3=path+"/*"
+            path4=path+"/"
+        print("\t"+path1)
+        print("\t"+path2)
+        print("\t"+path3)
+        print("\t"+path4)
+        
+        #jq '.items[] | select ( .status.loadBalancer.ingress[].hostname == "internal-k8s-ingresspyme2c-deffada9e5-1182658737.us-west-2.elb.amazonaws.com" and ( .spec.rules[].http.paths[].path == "/api/pyme2c/compensations/v1" or .spec.rules[].http.paths[].path == "/api/pyme2c/compensations/v1/" or .spec.rules[].http.paths[].path == "/api/pyme2c/compensations/v1/*" or .spec.rules[].http.paths[].path == "/api/pyme2c/compensations/v1*")) ' ingress.json | jq '.spec.rules[].http.paths[0].backend.service.name'
+        
+        subPrc = subprocess.Popen(['jq','.items[] | select ( .status.loadBalancer.ingress[].hostname == '+albDNS+' and ( .spec.rules[].http.paths[].path == "'+path1+'" or .spec.rules[].http.paths[].path == "'+path2+'" or .spec.rules[].http.paths[].path == "'+path3+'" or .spec.rules[].http.paths[].path == "'+path4+'"))','ingress.json'], stdout = subprocess.PIPE) 
+        subPrc2 = subprocess.Popen(['jq','.spec.rules[].http.paths[0].backend.service.name'], stdin=subPrc.stdout, stdout = subprocess.PIPE) 
+        k8sSvcName = str(subPrc2.communicate()[0].decode("utf-8"))
         k8sSvcName = k8sSvcName.lstrip().rstrip()
         print("K8S-Service NAME: "+ k8sSvcName)
 
