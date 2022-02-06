@@ -1,0 +1,1 @@
+curl -i http://adminkong.dev.blue.private/routes > routes.json
