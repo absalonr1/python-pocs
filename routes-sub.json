@@ -6,9 +6,9 @@
       "request_buffering": true,
       "response_buffering": true,
       "paths": [
-        "/api/container/core/v1"
+        "/api/integrations/moova/v1"
       ],
-      "id": "05adf831-8c80-459a-a69e-f696dfe4d004",
+      "id": "65a1cd8f-609d-4a5c-a069-32600a41e441",
       "sources": null,
       "https_redirect_status_code": 426,
       "preserve_host": false,
@@ -19,43 +19,13 @@
       "snis": null,
       "tags": null,
       "service": {
-        "id": "8377c5a7-d145-40c2-a48f-afb0f90d8038"
+        "id": "5d197700-18a4-43a6-b095-b4535d282dc6"
       },
       "destinations": null,
-      "updated_at": 1624650877,
+      "updated_at": 1632758214,
       "methods": null,
       "path_handling": "v0",
-      "created_at": 1624320517,
-      "protocols": [
-        "http",
-        "https"
-      ]
-    },
-    {
-      "headers": null,
-      "request_buffering": true,
-      "response_buffering": true,
-      "paths": [
-        "/api/pyme2c/cotizaciones/v1"
-      ],
-      "id": "0d246c5d-5395-4147-aa7a-86fc102b275a",
-      "sources": null,
-      "https_redirect_status_code": 426,
-      "preserve_host": false,
-      "name": null,
-      "hosts": null,
-      "strip_path": true,
-      "regex_priority": 0,
-      "snis": null,
-      "tags": null,
-      "service": {
-        "id": "b3f77a82-2e32-4cc0-88f9-608c1807e3bc"
-      },
-      "destinations": null,
-      "updated_at": 1624316330,
-      "methods": null,
-      "path_handling": "v0",
-      "created_at": 1624316330,
+      "created_at": 1632758214,
       "protocols": [
         "http",
         "https"
