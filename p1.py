@@ -1,26 +1,31 @@
+from asyncore import write
 import subprocess
 import re
 # python3 -m pip install requests
 import requests
 #import json
 
-# r = requests.get('http://adminkong.dev.blue.private/services/5d197700-18a4-43a6-b095-b4535d282dc6/plugins')
+# req = requests.get("http://adminkong.dev.blue.private/services")
 
-# jsonRespDictionary = r.json()
-# print(type(jsonRespDictionary))
+# with open('kong-services.json', 'wb') as fd:
+#     for chunk in req.iter_content(chunk_size=128):
+#         fd.write(chunk)
 
-# for item in jsonRespDictionary["data"]:
-#     print(item["name"])
-
+# subPrc = subprocess.Popen(['jq','.next','kong-services.json'], stdout = subprocess.PIPE) 
+# nextToken = str(subPrc.communicate()[0].decode("utf-8"))
+# nextToken=nextToken.lstrip().rstrip()
+# #nextToken=nextToken[1:len(nextToken)-1]
+# print(nextToken)
+# print(nextToken!="null")
 
 # if(True):
 #     quit()
 
-routesFileName="routes.json"
+routesFileName="routes-sub.json"
 servicesFileName="services.json"
 
 subPrc = subprocess.Popen(['jq','(.data[].paths[])',routesFileName], stdout = subprocess.PIPE) 
-pathArray = str(subPrc.communicate()[0].decode("utf-8")) 
+pathArray = str(subPrc.communicate()[0].decode("utf-8"))
 pathArray = pathArray.split('\n')
 
 # for each Path
@@ -30,8 +35,9 @@ myFile = open('summary.csv', 'w', buffering=bufsize)
 
 csvSeparator = ","
 
-myFile.write("path"+csvSeparator)
+myFile.write("Route path"+csvSeparator)
 myFile.write("svcId"+csvSeparator)
+myFile.write("svc upstream path"+csvSeparator)
 myFile.write("svcPlugins"+csvSeparator)
 myFile.write("albDNS"+csvSeparator)
 myFile.write("svcName"+csvSeparator)
@@ -42,6 +48,7 @@ myFile.write("k8sDeployName\n")
 
 path=""
 svcId=""
+svcUpPath=""
 svcPlugins=""
 albDNS=""
 svcName=""
@@ -62,7 +69,17 @@ for path in pathArray:
         if(len(svcId)>38):
             svcId="ERROR: Mas de un service para el path"
         else:
-            # http://adminkong.dev.blue.private/services/5d197700-18a4-43a6-b095-b4535d282dc6/plugins
+            subPrc = subprocess.Popen(['jq','(.data[] | select (.id == '+svcId+' ) )',servicesFileName], stdout = subprocess.PIPE) 
+            subPrc2 = subprocess.Popen(['jq','.name'], stdin=subPrc.stdout, stdout = subprocess.PIPE) 
+            svcName = str(subPrc2.communicate()[0].decode("utf-8"))
+            svcName = svcName.lstrip().rstrip()
+            print("Service NAME: "+ svcName)
+
+            subPrc = subprocess.Popen(['jq','(.data[] | select (.id == '+svcId+' ) )',servicesFileName], stdout = subprocess.PIPE) 
+            subPrc2 = subprocess.Popen(['jq','.path'], stdin=subPrc.stdout, stdout = subprocess.PIPE) 
+            svcUpPath = str(subPrc2.communicate()[0].decode("utf-8"))
+            svcUpPath = svcUpPath.lstrip().rstrip()
+            print("Service Upstream PATH: "+ svcUpPath)
 
             # Identificar los plugins asociados al service
             req = requests.get('http://adminkong.dev.blue.private/services/'+svcId[1:len(svcId)-1]+"/plugins")
@@ -71,7 +88,7 @@ for path in pathArray:
             #print(jsonRespDictionary)
             if(len(jsonRespDictionary)>0):
                 for item in jsonRespDictionary["data"]:
-                    svcPlugins= svcPlugins+";"+item["name"]
+                    svcPlugins= svcPlugins+"/"+item["name"]
                     if(svcPlugins.find("lambda") != -1):
                         flagLambda = True
             
@@ -83,31 +100,29 @@ for path in pathArray:
                 print("ALB DNS: "+ albDNS)
                 
                 
-                if(re.match("[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+",albDNS[1:len(albDNS)-1]) is None ):
-                    subPrc = subprocess.Popen(['jq','(.data[] | select (.id == '+svcId+' ) )',servicesFileName], stdout = subprocess.PIPE) 
-                    subPrc2 = subprocess.Popen(['jq','.name'], stdin=subPrc.stdout, stdout = subprocess.PIPE) 
-                    svcName = str(subPrc2.communicate()[0].decode("utf-8"))
-                    svcName = svcName.lstrip().rstrip()
-                    print("Service NAME: "+ svcName)
+                if(re.match("[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+",albDNS[1:len(albDNS)-1]) is None):
+                    
 
                     # quitar comillas dobles al inicio y al final
                     path = path[1:len(path)-1]
+
+                    svcUpPath = svcUpPath[1:len(svcUpPath)-1]
 
                     path1=""
                     path2=""
                     path3=""
                     path4=""
 
-                    if(path.endswith("/")):
-                        path1=path
-                        path2=path+"*"
-                        path3=path[0:len(path)-1]+"*"
-                        path4=path[0:len(path)-1]
+                    if(svcUpPath.endswith("/")):
+                        path1=svcUpPath
+                        path2=svcUpPath+"*"
+                        path3=svcUpPath[0:len(svcUpPath)-1]+"*"
+                        path4=svcUpPath[0:len(svcUpPath)-1]
                     else:
-                        path1=path
-                        path2=path+"*"
-                        path3=path+"/*"
-                        path4=path+"/"
+                        path1=svcUpPath
+                        path2=svcUpPath+"*"
+                        path3=svcUpPath+"/*"
+                        path4=svcUpPath+"/"
                     print("\t"+path1)
                     print("\t"+path2)
                     print("\t"+path3)
@@ -115,7 +130,10 @@ for path in pathArray:
                     
                     #jq '.items[] | select ( .status.loadBalancer.ingress[].hostname == "internal-k8s-ingresspyme2c-deffada9e5-1182658737.us-west-2.elb.amazonaws.com" and ( .spec.rules[].http.paths[].path == "/api/pyme2c/compensations/v1" or .spec.rules[].http.paths[].path == "/api/pyme2c/compensations/v1/" or .spec.rules[].http.paths[].path == "/api/pyme2c/compensations/v1/*" or .spec.rules[].http.paths[].path == "/api/pyme2c/compensations/v1*")) ' ingress.json | jq '.spec.rules[].http.paths[0].backend.service.name'
                     
-                    subPrc = subprocess.Popen(['jq','.items[] | select ( .status.loadBalancer.ingress[].hostname == '+albDNS+' and ( .spec.rules[].http.paths[].path == "'+path1+'" or .spec.rules[].http.paths[].path == "'+path2+'" or .spec.rules[].http.paths[].path == "'+path3+'" or .spec.rules[].http.paths[].path == "'+path4+'"))','ingress.json'], stdout = subprocess.PIPE) 
+                    subPrc = subprocess.Popen(['jq','.items[] | select ( .status.loadBalancer.ingress[].hostname == '+albDNS
+                            +' and ( .spec.rules[].http.paths[].path == "'+path1+
+                            '" or .spec.rules[].http.paths[].path == "'+path2+'" or .spec.rules[].http.paths[].path == "'+
+                            path3+'" or .spec.rules[].http.paths[].path == "'+path4+'"))','ingress.json'], stdout = subprocess.PIPE) 
                     subPrc2 = subprocess.Popen(['jq','.spec.rules[].http.paths[0].backend.service.name'], stdin=subPrc.stdout, stdout = subprocess.PIPE) 
                     k8sSvcName = str(subPrc2.communicate()[0].decode("utf-8"))
                     k8sSvcName = k8sSvcName.lstrip().rstrip()
@@ -145,7 +163,6 @@ for path in pathArray:
                     selectorApp = selectorApp.lstrip().rstrip()
                     print("K8S-selectorApp: "+ selectorApp) 
                     
-                    print("command: "+'kubectl get deploy -n '+k8sNameSpace+' -o json |'+ 'jq .items[] | select(.spec.template.metadata.labels.app == '+selectorApp+' ) | jq .metadata.name')
                     subPrc = subprocess.Popen(['kubectl get deploy -n '+k8sNameSpace+' -o json'], shell=True, stdout = subprocess.PIPE) 
                     subPrc2 = subprocess.Popen(['jq','.items[] | select(.spec.template.metadata.labels.app == '+selectorApp+' )'], stdin=subPrc.stdout, stdout = subprocess.PIPE)  
                     subPrc3 = subprocess.Popen(['jq','.metadata.name'], stdin=subPrc2.stdout, stdout = subprocess.PIPE)  
@@ -157,6 +174,7 @@ for path in pathArray:
         
         myFile.write(path+csvSeparator)
         myFile.write(svcId+csvSeparator)
+        myFile.write(svcUpPath+csvSeparator)
         myFile.write(svcPlugins+csvSeparator)
         myFile.write(albDNS+csvSeparator)
         myFile.write(svcName+csvSeparator)
@@ -168,6 +186,7 @@ for path in pathArray:
 
         path=""
         svcId=""
+        svcUpPath=""
         svcPlugins=""
         albDNS=""
         svcName=""

@@ -1,6 +1,74 @@
 {
-  "next": null,
+  "next": "/routes?offset=WyJmODI3MzM5ZC1jYjM5LTQ3OTktODc2Mi1jMjUxMDMwYzNmZGEiXQ",
   "data": [
+    {
+      "headers": null,
+      "request_buffering": true,
+      "response_buffering": true,
+      "paths": [
+        "/api/pyme2c/reports/v1"
+      ],
+      "id": "fa7c1dbb-af6c-4be3-afc0-d221c7ff8a7c",
+      "sources": null,
+      "https_redirect_status_code": 426,
+      "preserve_host": false,
+      "name": null,
+      "hosts": null,
+      "strip_path": true,
+      "regex_priority": 0,
+      "snis": null,
+      "tags": null,
+      "service": {
+        "id": "ca8e39d5-276c-4a4d-84aa-eaf0b79371e0"
+      },
+      "destinations": null,
+      "updated_at": 1641224122,
+      "methods": null,
+      "path_handling": "v0",
+      "created_at": 1641224122,
+      "protocols": [
+        "http",
+        "https"
+      ]
+    },
+    {
+      "headers": null,
+      "request_buffering": true,
+      "response_buffering": true,
+      "paths": [
+        "/api/node/v1"
+      ],
+      "id": "01d4cc9d-a350-41d8-b3c5-908059fa5150",
+      "sources": null,
+      "https_redirect_status_code": 426,
+      "preserve_host": false,
+      "name": "bx-srv-test-node-cicd--development",
+      "hosts": null,
+      "strip_path": true,
+      "regex_priority": 0,
+      "snis": null,
+      "tags": null,
+      "service": {
+        "id": "49735349-d2ed-44d5-a8cb-05a73f4cdbc3"
+      },
+      "destinations": null,
+      "updated_at": 1644419581,
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PATCH",
+        "OPTIONS",
+        "TRACE",
+        "CONNECT"
+      ],
+      "path_handling": "v0",
+      "created_at": 1644419581,
+      "protocols": [
+        "http",
+        "https"
+      ]
+    },
     {
       "headers": null,
       "request_buffering": true,
@@ -52,7 +120,7 @@
         "id": "cb7077e4-aea7-4164-8ca2-e196c2f7ed5d"
       },
       "destinations": null,
-      "updated_at": 1643419475,
+      "updated_at": 1644428986,
       "methods": [
         "GET",
         "POST",
@@ -494,7 +562,7 @@
         "id": "b9552561-d812-41d2-a956-fd6cbb6db000"
       },
       "destinations": null,
-      "updated_at": 1644002264,
+      "updated_at": 1644273497,
       "methods": [
         "GET",
         "POST",
@@ -637,7 +705,7 @@
       "request_buffering": true,
       "response_buffering": true,
       "paths": [
-        "/CubicacionServices/BXCB001_CUBICACION_REST/login"
+        "/CubicacionServices/BXCB001_CUBICACION_REST"
       ],
       "id": "3f03a24a-4e20-474e-a061-7a2f3b6eadb5",
       "sources": null,
@@ -653,7 +721,7 @@
         "id": "afdba0a1-d9fc-4357-a517-e07ad09c5267"
       },
       "destinations": null,
-      "updated_at": 1642102877,
+      "updated_at": 1644504777,
       "methods": [
         "GET",
         "POST",
@@ -801,7 +869,45 @@
       "request_buffering": true,
       "response_buffering": true,
       "paths": [
-        "/api/domain/v1"
+        "/api/node/v1"
+      ],
+      "id": "4d2fce71-96eb-476a-b1a4-eb1638895712",
+      "sources": null,
+      "https_redirect_status_code": 426,
+      "preserve_host": false,
+      "name": "bx-srv-test-node-cicd-development",
+      "hosts": null,
+      "strip_path": true,
+      "regex_priority": 0,
+      "snis": null,
+      "tags": null,
+      "service": {
+        "id": "57ae9f49-b4e9-4216-8c37-4845bc2df03f"
+      },
+      "destinations": null,
+      "updated_at": 1644419839,
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PATCH",
+        "OPTIONS",
+        "TRACE",
+        "CONNECT"
+      ],
+      "path_handling": "v0",
+      "created_at": 1644419839,
+      "protocols": [
+        "http",
+        "https"
+      ]
+    },
+    {
+      "headers": null,
+      "request_buffering": true,
+      "response_buffering": true,
+      "paths": [
+        "/api/domain/v2"
       ],
       "id": "4e634c94-eaa7-4e6a-96ef-a68f8c6e7591",
       "sources": null,
@@ -817,7 +923,7 @@
         "id": "f068c4cc-7ff2-444d-89b2-42b5ad6c7c3a"
       },
       "destinations": null,
-      "updated_at": 1643821134,
+      "updated_at": 1644269513,
       "methods": [
         "GET",
         "POST",
@@ -1113,6 +1219,42 @@
       ],
       "path_handling": "v0",
       "created_at": 1636747420,
+      "protocols": [
+        "http",
+        "https"
+      ]
+    },
+    {
+      "headers": null,
+      "request_buffering": true,
+      "response_buffering": true,
+      "paths": [
+        "/api/node/test/v1*"
+      ],
+      "id": "64bb5747-38c6-4091-a7e8-898b89fd91d2",
+      "sources": null,
+      "https_redirect_status_code": 426,
+      "preserve_host": false,
+      "name": "dev-bx-rts-node-mongo-redis",
+      "hosts": null,
+      "strip_path": true,
+      "regex_priority": 0,
+      "snis": null,
+      "tags": null,
+      "service": {
+        "id": "526d578f-78d2-411b-a710-5548969e69f8"
+      },
+      "destinations": null,
+      "updated_at": 1644587890,
+      "methods": [
+        "GET",
+        "POST",
+        "HEAD",
+        "OPTIONS",
+        "CONNECT"
+      ],
+      "path_handling": "v0",
+      "created_at": 1644237652,
       "protocols": [
         "http",
         "https"
@@ -1776,6 +1918,46 @@
       "request_buffering": true,
       "response_buffering": true,
       "paths": [
+        "/api/cross/v1/route"
+      ],
+      "id": "9203abf6-9e56-4271-9711-5b4d2bbba727",
+      "sources": null,
+      "https_redirect_status_code": 426,
+      "preserve_host": false,
+      "name": "dev-bx-rts-integs-route",
+      "hosts": null,
+      "strip_path": true,
+      "regex_priority": 0,
+      "snis": null,
+      "tags": null,
+      "service": {
+        "id": "6f86ab8a-bd41-42a6-b6af-e7153d4bdcd6"
+      },
+      "destinations": null,
+      "updated_at": 1644528347,
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PATCH",
+        "PUT",
+        "HEAD",
+        "OPTIONS",
+        "TRACE",
+        "CONNECT"
+      ],
+      "path_handling": "v0",
+      "created_at": 1644242549,
+      "protocols": [
+        "http",
+        "https"
+      ]
+    },
+    {
+      "headers": null,
+      "request_buffering": true,
+      "response_buffering": true,
+      "paths": [
         "/api/cross/tracking/v1"
       ],
       "id": "920473c8-4e2b-4bb1-9acf-0d47205e265f",
@@ -1962,42 +2144,6 @@
       "methods": null,
       "path_handling": "v0",
       "created_at": 1641934817,
-      "protocols": [
-        "http",
-        "https"
-      ]
-    },
-    {
-      "headers": null,
-      "request_buffering": true,
-      "response_buffering": true,
-      "paths": [
-        "/api/cms/v1"
-      ],
-      "id": "a742b26a-a373-4de4-8623-54b1846709e7",
-      "sources": null,
-      "https_redirect_status_code": 426,
-      "preserve_host": false,
-      "name": "bx-rtr-strapi",
-      "hosts": null,
-      "strip_path": true,
-      "regex_priority": 0,
-      "snis": null,
-      "tags": null,
-      "service": {
-        "id": "4c616af8-4be6-4285-9193-9d953065a0e8"
-      },
-      "destinations": null,
-      "updated_at": 1643297753,
-      "methods": [
-        "GET",
-        "POST",
-        "HEAD",
-        "OPTIONS",
-        "CONNECT"
-      ],
-      "path_handling": "v0",
-      "created_at": 1643028527,
       "protocols": [
         "http",
         "https"
@@ -2286,6 +2432,42 @@
       "request_buffering": true,
       "response_buffering": true,
       "paths": [
+        "/api/domain/v1"
+      ],
+      "id": "af0c976e-2f30-4360-964a-336aed9ccb09",
+      "sources": null,
+      "https_redirect_status_code": 426,
+      "preserve_host": false,
+      "name": "dev-bx-rts-springboot-ojdbc",
+      "hosts": null,
+      "strip_path": true,
+      "regex_priority": 0,
+      "snis": null,
+      "tags": null,
+      "service": {
+        "id": "4d26ab9b-b436-4468-aa34-f68a4e9543e4"
+      },
+      "destinations": null,
+      "updated_at": 1644430045,
+      "methods": [
+        "GET",
+        "POST",
+        "HEAD",
+        "OPTIONS",
+        "CONNECT"
+      ],
+      "path_handling": "v0",
+      "created_at": 1644237767,
+      "protocols": [
+        "http",
+        "https"
+      ]
+    },
+    {
+      "headers": null,
+      "request_buffering": true,
+      "response_buffering": true,
+      "paths": [
         "/api/container/validation/v1"
       ],
       "id": "af647ba5-9837-4116-8f85-c3d26ae7f437",
@@ -2541,7 +2723,7 @@
       "request_buffering": true,
       "response_buffering": true,
       "paths": [
-        "/api/node/v1"
+        "/api/node/v2"
       ],
       "id": "d07bcaa5-289d-46a9-bc7b-26ddc2833b79",
       "sources": null,
@@ -2557,7 +2739,7 @@
         "id": "a51b54ca-f805-4391-b03a-633e10fa9b70"
       },
       "destinations": null,
-      "updated_at": 1643824404,
+      "updated_at": 1644265071,
       "methods": [
         "GET",
         "POST",
@@ -2743,6 +2925,42 @@
       "request_buffering": true,
       "response_buffering": true,
       "paths": [
+        "/api/cross/v1/agencies"
+      ],
+      "id": "ddc4803b-6066-41be-802b-f4965ccf27dc",
+      "sources": null,
+      "https_redirect_status_code": 426,
+      "preserve_host": false,
+      "name": "dev-bx-rts-integs-agencies",
+      "hosts": null,
+      "strip_path": true,
+      "regex_priority": 0,
+      "snis": null,
+      "tags": null,
+      "service": {
+        "id": "0bf5d601-a273-4bf9-9c22-60be4470158c"
+      },
+      "destinations": null,
+      "updated_at": 1644588680,
+      "methods": [
+        "GET",
+        "POST",
+        "HEAD",
+        "OPTIONS",
+        "CONNECT"
+      ],
+      "path_handling": "v0",
+      "created_at": 1644509371,
+      "protocols": [
+        "http",
+        "https"
+      ]
+    },
+    {
+      "headers": null,
+      "request_buffering": true,
+      "response_buffering": true,
+      "paths": [
         "/api/tracking/v1/webhook"
       ],
       "id": "e4c633c7-aa00-4143-b913-4f3165c2f00a",
@@ -2917,42 +3135,6 @@
       "request_buffering": true,
       "response_buffering": true,
       "paths": [
-        "/api/cms/v1"
-      ],
-      "id": "f10f4c58-3e79-4bd1-8a1d-2c3579cb9846",
-      "sources": null,
-      "https_redirect_status_code": 426,
-      "preserve_host": false,
-      "name": "bx-srv-strapi",
-      "hosts": null,
-      "strip_path": true,
-      "regex_priority": 0,
-      "snis": null,
-      "tags": null,
-      "service": {
-        "id": "b469f644-193d-48e4-a9d7-8b60172b4604"
-      },
-      "destinations": null,
-      "updated_at": 1643249200,
-      "methods": [
-        "GET",
-        "POST",
-        "HEAD",
-        "OPTIONS",
-        "CONNECT"
-      ],
-      "path_handling": "v0",
-      "created_at": 1643061767,
-      "protocols": [
-        "http",
-        "https"
-      ]
-    },
-    {
-      "headers": null,
-      "request_buffering": true,
-      "response_buffering": true,
-      "paths": [
         "/GeneradorEtiqueta2WS/BXGET001_generadorEtiqueta"
       ],
       "id": "f273d95d-8dc0-4dba-a44a-761221d6b04a",
@@ -3075,36 +3257,7 @@
         "http",
         "https"
       ]
-    },
-    {
-      "headers": null,
-      "request_buffering": true,
-      "response_buffering": true,
-      "paths": [
-        "/api/pyme2c/reports/v1"
-      ],
-      "id": "fa7c1dbb-af6c-4be3-afc0-d221c7ff8a7c",
-      "sources": null,
-      "https_redirect_status_code": 426,
-      "preserve_host": false,
-      "name": null,
-      "hosts": null,
-      "strip_path": true,
-      "regex_priority": 0,
-      "snis": null,
-      "tags": null,
-      "service": {
-        "id": "ca8e39d5-276c-4a4d-84aa-eaf0b79371e0"
-      },
-      "destinations": null,
-      "updated_at": 1641224122,
-      "methods": null,
-      "path_handling": "v0",
-      "created_at": 1641224122,
-      "protocols": [
-        "http",
-        "https"
-      ]
     }
-  ]
+  ],
+  "offset": "WyJmODI3MzM5ZC1jYjM5LTQ3OTktODc2Mi1jMjUxMDMwYzNmZGEiXQ"
 }

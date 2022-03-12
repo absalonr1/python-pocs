@@ -6,9 +6,9 @@
       "request_buffering": true,
       "response_buffering": true,
       "paths": [
-        "/api/integrations/moova/v1"
+        "/api/pyme2c/emissions/callback"
       ],
-      "id": "65a1cd8f-609d-4a5c-a069-32600a41e441",
+      "id": "322aa013-eb93-4017-95ef-80b653547e59",
       "sources": null,
       "https_redirect_status_code": 426,
       "preserve_host": false,
@@ -19,13 +19,13 @@
       "snis": null,
       "tags": null,
       "service": {
-        "id": "5d197700-18a4-43a6-b095-b4535d282dc6"
+        "id": "1aa81400-35f7-48c3-824c-ca0f0a02d45a"
       },
       "destinations": null,
-      "updated_at": 1632758214,
+      "updated_at": 1626376335,
       "methods": null,
       "path_handling": "v0",
-      "created_at": 1632758214,
+      "created_at": 1626376335,
       "protocols": [
         "http",
         "https"

@@ -1372,8 +1372,70 @@
             "kind": "Ingress",
             "metadata": {
                 "annotations": {
+                    "alb.ingress.kubernetes.io/group.name": "igrz-integration",
+                    "alb.ingress.kubernetes.io/group.order": "10",
+                    "alb.ingress.kubernetes.io/healthcheck-interval-seconds": "60",
+                    "alb.ingress.kubernetes.io/healthcheck-path": "/api/cross/v1/agencies/health",
+                    "alb.ingress.kubernetes.io/healthcheck-port": "traffic-port",
+                    "alb.ingress.kubernetes.io/healthcheck-protocol": "HTTP",
+                    "alb.ingress.kubernetes.io/healthcheck-timeout-seconds": "5",
+                    "alb.ingress.kubernetes.io/healthy-threshold-count": "2",
+                    "alb.ingress.kubernetes.io/scheme": "internal",
+                    "alb.ingress.kubernetes.io/success-codes": "200",
+                    "alb.ingress.kubernetes.io/target-type": "instance",
+                    "alb.ingress.kubernetes.io/unhealthy-threshold-count": "2",
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"extensions/v1beta1\",\"kind\":\"Ingress\",\"metadata\":{\"annotations\":{\"alb.ingress.kubernetes.io/group.name\":\"igrz-integration\",\"alb.ingress.kubernetes.io/group.order\":\"10\",\"alb.ingress.kubernetes.io/healthcheck-interval-seconds\":\"60\",\"alb.ingress.kubernetes.io/healthcheck-path\":\"/api/cross/v1/agencies/health\",\"alb.ingress.kubernetes.io/healthcheck-port\":\"traffic-port\",\"alb.ingress.kubernetes.io/healthcheck-protocol\":\"HTTP\",\"alb.ingress.kubernetes.io/healthcheck-timeout-seconds\":\"5\",\"alb.ingress.kubernetes.io/healthy-threshold-count\":\"2\",\"alb.ingress.kubernetes.io/scheme\":\"internal\",\"alb.ingress.kubernetes.io/success-codes\":\"200\",\"alb.ingress.kubernetes.io/target-type\":\"instance\",\"alb.ingress.kubernetes.io/unhealthy-threshold-count\":\"2\",\"kubernetes.io/ingress.class\":\"alb\"},\"name\":\"ingress-bx-srv-integs-agencies\",\"namespace\":\"dev-ns-integration\"},\"spec\":{\"rules\":[{\"http\":{\"paths\":[{\"backend\":{\"serviceName\":\"bx-srv-integs-agencies\",\"servicePort\":80},\"path\":\"/api/cross/v1/agencies/*\"}]}}]}}\n",
+                    "kubernetes.io/ingress.class": "alb"
+                },
+                "creationTimestamp": "2022-02-10T16:09:07Z",
+                "finalizers": [
+                    "group.ingress.k8s.aws/igrz-integration"
+                ],
+                "generation": 1,
+                "name": "ingress-bx-srv-integs-agencies",
+                "namespace": "dev-ns-integration",
+                "resourceVersion": "163852526",
+                "uid": "3c76eb07-f059-4cb2-b3c3-c8d2b0b68005"
+            },
+            "spec": {
+                "rules": [
+                    {
+                        "http": {
+                            "paths": [
+                                {
+                                    "backend": {
+                                        "service": {
+                                            "name": "bx-srv-integs-agencies",
+                                            "port": {
+                                                "number": 80
+                                            }
+                                        }
+                                    },
+                                    "path": "/api/cross/v1/agencies/*",
+                                    "pathType": "ImplementationSpecific"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "status": {
+                "loadBalancer": {
+                    "ingress": [
+                        {
+                            "hostname": "internal-k8s-igrzintegration-27e8165227-1605582491.us-west-2.elb.amazonaws.com"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "apiVersion": "networking.k8s.io/v1",
+            "kind": "Ingress",
+            "metadata": {
+                "annotations": {
                     "alb.ingress.kubernetes.io/group.name": "igrz-integs",
-                    "alb.ingress.kubernetes.io/group.order": "4",
+                    "alb.ingress.kubernetes.io/group.order": "5",
                     "alb.ingress.kubernetes.io/healthcheck-interval-seconds": "60",
                     "alb.ingress.kubernetes.io/healthcheck-path": "/api/v1/customer/actuator/health/liveness",
                     "alb.ingress.kubernetes.io/healthcheck-port": "traffic-port",
@@ -1384,7 +1446,7 @@
                     "alb.ingress.kubernetes.io/success-codes": "200",
                     "alb.ingress.kubernetes.io/target-type": "instance",
                     "alb.ingress.kubernetes.io/unhealthy-threshold-count": "2",
-                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"extensions/v1beta1\",\"kind\":\"Ingress\",\"metadata\":{\"annotations\":{\"alb.ingress.kubernetes.io/group.name\":\"igrz-integs\",\"alb.ingress.kubernetes.io/group.order\":\"4\",\"alb.ingress.kubernetes.io/healthcheck-interval-seconds\":\"60\",\"alb.ingress.kubernetes.io/healthcheck-path\":\"/api/v1/customer/actuator/health/liveness\",\"alb.ingress.kubernetes.io/healthcheck-port\":\"traffic-port\",\"alb.ingress.kubernetes.io/healthcheck-protocol\":\"HTTP\",\"alb.ingress.kubernetes.io/healthcheck-timeout-seconds\":\"5\",\"alb.ingress.kubernetes.io/healthy-threshold-count\":\"2\",\"alb.ingress.kubernetes.io/scheme\":\"internal\",\"alb.ingress.kubernetes.io/success-codes\":\"200\",\"alb.ingress.kubernetes.io/target-type\":\"instance\",\"alb.ingress.kubernetes.io/unhealthy-threshold-count\":\"2\",\"kubernetes.io/ingress.class\":\"alb\"},\"name\":\"ingress-bx-srv-integs-customer\",\"namespace\":\"dev-ns-integration\"},\"spec\":{\"rules\":[{\"http\":{\"paths\":[{\"backend\":{\"serviceName\":\"bx-srv-integs-customer\",\"servicePort\":80},\"path\":\"/api/v1/customer/*\"}]}}]}}\n",
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"extensions/v1beta1\",\"kind\":\"Ingress\",\"metadata\":{\"annotations\":{\"alb.ingress.kubernetes.io/group.name\":\"igrz-integs\",\"alb.ingress.kubernetes.io/group.order\":\"5\",\"alb.ingress.kubernetes.io/healthcheck-interval-seconds\":\"60\",\"alb.ingress.kubernetes.io/healthcheck-path\":\"/api/v1/customer/actuator/health/liveness\",\"alb.ingress.kubernetes.io/healthcheck-port\":\"traffic-port\",\"alb.ingress.kubernetes.io/healthcheck-protocol\":\"HTTP\",\"alb.ingress.kubernetes.io/healthcheck-timeout-seconds\":\"5\",\"alb.ingress.kubernetes.io/healthy-threshold-count\":\"2\",\"alb.ingress.kubernetes.io/scheme\":\"internal\",\"alb.ingress.kubernetes.io/success-codes\":\"200\",\"alb.ingress.kubernetes.io/target-type\":\"instance\",\"alb.ingress.kubernetes.io/unhealthy-threshold-count\":\"2\",\"kubernetes.io/ingress.class\":\"alb\"},\"name\":\"ingress-bx-srv-integs-customer\",\"namespace\":\"dev-ns-integration\"},\"spec\":{\"rules\":[{\"http\":{\"paths\":[{\"backend\":{\"serviceName\":\"bx-srv-integs-customer\",\"servicePort\":80},\"path\":\"/api/v1/customer/*\"}]}}]}}\n",
                     "kubernetes.io/ingress.class": "alb"
                 },
                 "creationTimestamp": "2022-02-03T00:15:14Z",
@@ -1394,7 +1456,7 @@
                 "generation": 1,
                 "name": "ingress-bx-srv-integs-customer",
                 "namespace": "dev-ns-integration",
-                "resourceVersion": "161543282",
+                "resourceVersion": "162538153",
                 "uid": "e463cea0-f10b-486a-bded-3ba08967222d"
             },
             "spec": {
@@ -1434,8 +1496,132 @@
             "kind": "Ingress",
             "metadata": {
                 "annotations": {
+                    "alb.ingress.kubernetes.io/group.name": "igrz-integration",
+                    "alb.ingress.kubernetes.io/group.order": "6",
+                    "alb.ingress.kubernetes.io/healthcheck-interval-seconds": "60",
+                    "alb.ingress.kubernetes.io/healthcheck-path": "/api/cross/v1/route/actuator/health/liveness",
+                    "alb.ingress.kubernetes.io/healthcheck-port": "traffic-port",
+                    "alb.ingress.kubernetes.io/healthcheck-protocol": "HTTP",
+                    "alb.ingress.kubernetes.io/healthcheck-timeout-seconds": "5",
+                    "alb.ingress.kubernetes.io/healthy-threshold-count": "2",
+                    "alb.ingress.kubernetes.io/scheme": "internal",
+                    "alb.ingress.kubernetes.io/success-codes": "200",
+                    "alb.ingress.kubernetes.io/target-type": "instance",
+                    "alb.ingress.kubernetes.io/unhealthy-threshold-count": "2",
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"extensions/v1beta1\",\"kind\":\"Ingress\",\"metadata\":{\"annotations\":{\"alb.ingress.kubernetes.io/group.name\":\"igrz-integration\",\"alb.ingress.kubernetes.io/group.order\":\"6\",\"alb.ingress.kubernetes.io/healthcheck-interval-seconds\":\"60\",\"alb.ingress.kubernetes.io/healthcheck-path\":\"/api/cross/v1/route/actuator/health/liveness\",\"alb.ingress.kubernetes.io/healthcheck-port\":\"traffic-port\",\"alb.ingress.kubernetes.io/healthcheck-protocol\":\"HTTP\",\"alb.ingress.kubernetes.io/healthcheck-timeout-seconds\":\"5\",\"alb.ingress.kubernetes.io/healthy-threshold-count\":\"2\",\"alb.ingress.kubernetes.io/scheme\":\"internal\",\"alb.ingress.kubernetes.io/success-codes\":\"200\",\"alb.ingress.kubernetes.io/target-type\":\"instance\",\"alb.ingress.kubernetes.io/unhealthy-threshold-count\":\"2\",\"kubernetes.io/ingress.class\":\"alb\"},\"name\":\"ingress-bx-srv-integs-route\",\"namespace\":\"dev-ns-integration\"},\"spec\":{\"rules\":[{\"http\":{\"paths\":[{\"backend\":{\"serviceName\":\"bx-srv-integs-route\",\"servicePort\":80},\"path\":\"/api/cross/v1/route/*\"}]}}]}}\n",
+                    "kubernetes.io/ingress.class": "alb"
+                },
+                "creationTimestamp": "2022-02-07T12:33:45Z",
+                "finalizers": [
+                    "group.ingress.k8s.aws/igrz-integration"
+                ],
+                "generation": 1,
+                "name": "ingress-bx-srv-integs-route",
+                "namespace": "dev-ns-integration",
+                "resourceVersion": "163585733",
+                "uid": "496d36d4-7082-4b1b-bc53-37d19ff501ed"
+            },
+            "spec": {
+                "rules": [
+                    {
+                        "http": {
+                            "paths": [
+                                {
+                                    "backend": {
+                                        "service": {
+                                            "name": "bx-srv-integs-route",
+                                            "port": {
+                                                "number": 80
+                                            }
+                                        }
+                                    },
+                                    "path": "/api/cross/v1/route/*",
+                                    "pathType": "ImplementationSpecific"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "status": {
+                "loadBalancer": {
+                    "ingress": [
+                        {
+                            "hostname": "internal-k8s-igrzintegration-27e8165227-1605582491.us-west-2.elb.amazonaws.com"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "apiVersion": "networking.k8s.io/v1",
+            "kind": "Ingress",
+            "metadata": {
+                "annotations": {
+                    "alb.ingress.kubernetes.io/group.name": "igrz-labs",
+                    "alb.ingress.kubernetes.io/group.order": "59",
+                    "alb.ingress.kubernetes.io/healthcheck-interval-seconds": "60",
+                    "alb.ingress.kubernetes.io/healthcheck-path": "/api/legacy/agency/v1/health",
+                    "alb.ingress.kubernetes.io/healthcheck-port": "traffic-port",
+                    "alb.ingress.kubernetes.io/healthcheck-protocol": "HTTP",
+                    "alb.ingress.kubernetes.io/healthcheck-timeout-seconds": "5",
+                    "alb.ingress.kubernetes.io/healthy-threshold-count": "2",
+                    "alb.ingress.kubernetes.io/scheme": "internal",
+                    "alb.ingress.kubernetes.io/success-codes": "200",
+                    "alb.ingress.kubernetes.io/target-type": "instance",
+                    "alb.ingress.kubernetes.io/unhealthy-threshold-count": "2",
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"extensions/v1beta1\",\"kind\":\"Ingress\",\"metadata\":{\"annotations\":{\"alb.ingress.kubernetes.io/group.name\":\"igrz-labs\",\"alb.ingress.kubernetes.io/group.order\":\"59\",\"alb.ingress.kubernetes.io/healthcheck-interval-seconds\":\"60\",\"alb.ingress.kubernetes.io/healthcheck-path\":\"/api/legacy/agency/v1/health\",\"alb.ingress.kubernetes.io/healthcheck-port\":\"traffic-port\",\"alb.ingress.kubernetes.io/healthcheck-protocol\":\"HTTP\",\"alb.ingress.kubernetes.io/healthcheck-timeout-seconds\":\"5\",\"alb.ingress.kubernetes.io/healthy-threshold-count\":\"2\",\"alb.ingress.kubernetes.io/scheme\":\"internal\",\"alb.ingress.kubernetes.io/success-codes\":\"200\",\"alb.ingress.kubernetes.io/target-type\":\"instance\",\"alb.ingress.kubernetes.io/unhealthy-threshold-count\":\"2\",\"kubernetes.io/ingress.class\":\"alb\"},\"name\":\"ingress-bx-srv-integs-agencies\",\"namespace\":\"dev-ns-labs\"},\"spec\":{\"rules\":[{\"http\":{\"paths\":[{\"backend\":{\"serviceName\":\"bx-srv-integs-agencies\",\"servicePort\":80},\"path\":\"/api/legacy/agency/v1/*\"}]}}]}}\n",
+                    "kubernetes.io/ingress.class": "alb"
+                },
+                "creationTimestamp": "2022-02-10T14:41:14Z",
+                "finalizers": [
+                    "group.ingress.k8s.aws/igrz-labs"
+                ],
+                "generation": 1,
+                "name": "ingress-bx-srv-integs-agencies",
+                "namespace": "dev-ns-labs",
+                "resourceVersion": "163477746",
+                "uid": "a12583ac-f04a-45bc-a622-2100fdf66ed9"
+            },
+            "spec": {
+                "rules": [
+                    {
+                        "http": {
+                            "paths": [
+                                {
+                                    "backend": {
+                                        "service": {
+                                            "name": "bx-srv-integs-agencies",
+                                            "port": {
+                                                "number": 80
+                                            }
+                                        }
+                                    },
+                                    "path": "/api/legacy/agency/v1/*",
+                                    "pathType": "ImplementationSpecific"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "status": {
+                "loadBalancer": {
+                    "ingress": [
+                        {
+                            "hostname": "internal-k8s-igrzlabs-f89ba1c1d6-930636780.us-west-2.elb.amazonaws.com"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "apiVersion": "networking.k8s.io/v1",
+            "kind": "Ingress",
+            "metadata": {
+                "annotations": {
                     "alb.ingress.kubernetes.io/group.name": "ingrz-grp-labs",
-                    "alb.ingress.kubernetes.io/group.order": "12",
+                    "alb.ingress.kubernetes.io/group.order": "62",
                     "alb.ingress.kubernetes.io/healthcheck-interval-seconds": "60",
                     "alb.ingress.kubernetes.io/healthcheck-path": "/api/node/v1/health-liveness",
                     "alb.ingress.kubernetes.io/healthcheck-port": "traffic-port",
@@ -1446,7 +1632,7 @@
                     "alb.ingress.kubernetes.io/success-codes": "200",
                     "alb.ingress.kubernetes.io/target-type": "instance",
                     "alb.ingress.kubernetes.io/unhealthy-threshold-count": "2",
-                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"extensions/v1beta1\",\"kind\":\"Ingress\",\"metadata\":{\"annotations\":{\"alb.ingress.kubernetes.io/group.name\":\"ingrz-grp-labs\",\"alb.ingress.kubernetes.io/group.order\":\"12\",\"alb.ingress.kubernetes.io/healthcheck-interval-seconds\":\"60\",\"alb.ingress.kubernetes.io/healthcheck-path\":\"/api/node/v1/health-liveness\",\"alb.ingress.kubernetes.io/healthcheck-port\":\"traffic-port\",\"alb.ingress.kubernetes.io/healthcheck-protocol\":\"HTTP\",\"alb.ingress.kubernetes.io/healthcheck-timeout-seconds\":\"5\",\"alb.ingress.kubernetes.io/healthy-threshold-count\":\"2\",\"alb.ingress.kubernetes.io/scheme\":\"internal\",\"alb.ingress.kubernetes.io/success-codes\":\"200\",\"alb.ingress.kubernetes.io/target-type\":\"instance\",\"alb.ingress.kubernetes.io/unhealthy-threshold-count\":\"2\",\"kubernetes.io/ingress.class\":\"alb\"},\"name\":\"ingress-bx-tmpl-node-mongo-redis\",\"namespace\":\"dev-ns-labs\"},\"spec\":{\"rules\":[{\"http\":{\"paths\":[{\"backend\":{\"serviceName\":\"bx-tmpl-node-mongo-redis\",\"servicePort\":80},\"path\":\"/api/node/v1/*\"}]}}]}}\n",
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"extensions/v1beta1\",\"kind\":\"Ingress\",\"metadata\":{\"annotations\":{\"alb.ingress.kubernetes.io/group.name\":\"ingrz-grp-labs\",\"alb.ingress.kubernetes.io/group.order\":\"62\",\"alb.ingress.kubernetes.io/healthcheck-interval-seconds\":\"60\",\"alb.ingress.kubernetes.io/healthcheck-path\":\"/api/node/v1/health-liveness\",\"alb.ingress.kubernetes.io/healthcheck-port\":\"traffic-port\",\"alb.ingress.kubernetes.io/healthcheck-protocol\":\"HTTP\",\"alb.ingress.kubernetes.io/healthcheck-timeout-seconds\":\"5\",\"alb.ingress.kubernetes.io/healthy-threshold-count\":\"2\",\"alb.ingress.kubernetes.io/scheme\":\"internal\",\"alb.ingress.kubernetes.io/success-codes\":\"200\",\"alb.ingress.kubernetes.io/target-type\":\"instance\",\"alb.ingress.kubernetes.io/unhealthy-threshold-count\":\"2\",\"kubernetes.io/ingress.class\":\"alb\"},\"name\":\"ingress-bx-tmpl-node-mongo-redis\",\"namespace\":\"dev-ns-labs\"},\"spec\":{\"rules\":[{\"http\":{\"paths\":[{\"backend\":{\"serviceName\":\"bx-tmpl-node-mongo-redis\",\"servicePort\":80},\"path\":\"/api/node/v1/*\"}]}}]}}\n",
                     "kubernetes.io/ingress.class": "alb"
                 },
                 "creationTimestamp": "2022-02-02T17:29:37Z",
@@ -1456,7 +1642,7 @@
                 "generation": 1,
                 "name": "ingress-bx-tmpl-node-mongo-redis",
                 "namespace": "dev-ns-labs",
-                "resourceVersion": "160891355",
+                "resourceVersion": "163848974",
                 "uid": "436dfe0d-5176-4e9a-98fe-52956750da8f"
             },
             "spec": {
@@ -1497,7 +1683,7 @@
             "metadata": {
                 "annotations": {
                     "alb.ingress.kubernetes.io/group.name": "igrz-labs",
-                    "alb.ingress.kubernetes.io/group.order": "10",
+                    "alb.ingress.kubernetes.io/group.order": "58",
                     "alb.ingress.kubernetes.io/healthcheck-interval-seconds": "60",
                     "alb.ingress.kubernetes.io/healthcheck-path": "/api/domain/v1/actuator/health",
                     "alb.ingress.kubernetes.io/healthcheck-port": "traffic-port",
@@ -1508,7 +1694,7 @@
                     "alb.ingress.kubernetes.io/success-codes": "200",
                     "alb.ingress.kubernetes.io/target-type": "instance",
                     "alb.ingress.kubernetes.io/unhealthy-threshold-count": "2",
-                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"extensions/v1beta1\",\"kind\":\"Ingress\",\"metadata\":{\"annotations\":{\"alb.ingress.kubernetes.io/group.name\":\"igrz-labs\",\"alb.ingress.kubernetes.io/group.order\":\"10\",\"alb.ingress.kubernetes.io/healthcheck-interval-seconds\":\"60\",\"alb.ingress.kubernetes.io/healthcheck-path\":\"/api/domain/v1/actuator/health\",\"alb.ingress.kubernetes.io/healthcheck-port\":\"traffic-port\",\"alb.ingress.kubernetes.io/healthcheck-protocol\":\"HTTP\",\"alb.ingress.kubernetes.io/healthcheck-timeout-seconds\":\"5\",\"alb.ingress.kubernetes.io/healthy-threshold-count\":\"2\",\"alb.ingress.kubernetes.io/scheme\":\"internal\",\"alb.ingress.kubernetes.io/success-codes\":\"200\",\"alb.ingress.kubernetes.io/target-type\":\"instance\",\"alb.ingress.kubernetes.io/unhealthy-threshold-count\":\"2\",\"kubernetes.io/ingress.class\":\"alb\"},\"name\":\"ingress-bx-tmpl-springboot-ojdbc\",\"namespace\":\"dev-ns-labs\"},\"spec\":{\"rules\":[{\"http\":{\"paths\":[{\"backend\":{\"serviceName\":\"bx-tmpl-springboot-ojdbc\",\"servicePort\":80},\"path\":\"/api/domain/v1/*\"}]}}]}}\n",
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"extensions/v1beta1\",\"kind\":\"Ingress\",\"metadata\":{\"annotations\":{\"alb.ingress.kubernetes.io/group.name\":\"igrz-labs\",\"alb.ingress.kubernetes.io/group.order\":\"58\",\"alb.ingress.kubernetes.io/healthcheck-interval-seconds\":\"60\",\"alb.ingress.kubernetes.io/healthcheck-path\":\"/api/domain/v1/actuator/health\",\"alb.ingress.kubernetes.io/healthcheck-port\":\"traffic-port\",\"alb.ingress.kubernetes.io/healthcheck-protocol\":\"HTTP\",\"alb.ingress.kubernetes.io/healthcheck-timeout-seconds\":\"5\",\"alb.ingress.kubernetes.io/healthy-threshold-count\":\"2\",\"alb.ingress.kubernetes.io/scheme\":\"internal\",\"alb.ingress.kubernetes.io/success-codes\":\"200\",\"alb.ingress.kubernetes.io/target-type\":\"instance\",\"alb.ingress.kubernetes.io/unhealthy-threshold-count\":\"2\",\"kubernetes.io/ingress.class\":\"alb\"},\"name\":\"ingress-bx-tmpl-springboot-ojdbc\",\"namespace\":\"dev-ns-labs\"},\"spec\":{\"rules\":[{\"http\":{\"paths\":[{\"backend\":{\"serviceName\":\"bx-tmpl-springboot-ojdbc\",\"servicePort\":80},\"path\":\"/api/domain/v1/*\"}]}}]}}\n",
                     "kubernetes.io/ingress.class": "alb"
                 },
                 "creationTimestamp": "2022-02-02T16:38:23Z",
@@ -1518,7 +1704,7 @@
                 "generation": 1,
                 "name": "ingress-bx-tmpl-springboot-ojdbc",
                 "namespace": "dev-ns-labs",
-                "resourceVersion": "160879573",
+                "resourceVersion": "163149388",
                 "uid": "f1e948e9-1ac2-4393-9692-d888648b7c6c"
             },
             "spec": {
