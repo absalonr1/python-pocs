@@ -1,15 +1,20 @@
 from asyncore import write
 import subprocess
 import re
+
 # python3 -m pip install requests
 import requests
 #import json
 
-# req = requests.get("http://adminkong.dev.blue.private/services")
+req = requests.get("http://adminkong.dev.blue.private/services")
 
-# with open('kong-services.json', 'wb') as fd:
-#     for chunk in req.iter_content(chunk_size=128):
-#         fd.write(chunk)
+with open('kong-services.json', 'wb') as fd:
+    for chunk in req.iter_content(chunk_size=128):
+        fd.write(chunk)
+subPrc = subprocess.Popen(['jq . kong-services.json > kong-services-f.json' ], shell=True) 
+subPrc.communicate()
+subPrc = subprocess.Popen(['rm kong-services.json' ], shell=True) 
+subPrc.communicate()
 
 # subPrc = subprocess.Popen(['jq','.next','kong-services.json'], stdout = subprocess.PIPE) 
 # nextToken = str(subPrc.communicate()[0].decode("utf-8"))
@@ -18,8 +23,8 @@ import requests
 # print(nextToken)
 # print(nextToken!="null")
 
-# if(True):
-#     quit()
+if(True):
+    quit()
 
 routesFileName="routes-sub.json"
 servicesFileName="services.json"

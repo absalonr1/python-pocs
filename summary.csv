@@ -1,2 +1,2 @@
-Route path,svcId,svc upstream path,svcPlugins,albDNS,svcName,k8sSvcName,k8sNameSpace,selectorApp,k8sDeployName
-/api/pyme2c/emissions/callback,"1aa81400-35f7-48c3-824c-ca0f0a02d45a",/api/pyme2c/emissions/callback,/cors,"internal-k8s-ingresspyme2c-deffada9e5-1182658737.us-west-2.elb.amazonaws.com","dev-srv00037-pyme2c-order",,,,
+Route ID,Route path,svcName,svcId,svc upstream path,svcPlugins,albDNS,k8sSvcName,k8sNameSpace,selectorApp,k8sDeployName
+01d4cc9d-a350-41d8-b3c5-908059fa5150,/api/node/v1,bx-rtr-test-node-cicd--development,49735349-d2ed-44d5-a8cb-05a73f4cdbc3,/api/node/v1,/jwt-keycloak/cors/key-auth,temporalurl.us-west-2.com,,,,
