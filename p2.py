@@ -8,6 +8,50 @@ import re
 import requests
 #import json
 
+def trimAndRemoveDoubleQuotes(string):
+    string=string.replace("\"","")
+    string=string.replace("\n","")
+    return string
+
+# alb= "internal-k8s-ingresscontainer-fcc9610877-445198957.us-west-2.elb.amazonaws.com"
+# routePath = "/api/container/acklink/v1"
+# command = 'jq \'.items[] | select ( .status.loadBalancer.ingress[].hostname == "internal-k8s-ingresscontainer-fcc9610877-445198957.us-west-2.elb.amazonaws.com" )\' k8s-ingress.json | jq \'.spec.rules[].http.paths[0].backend.service.name , .spec.rules[].http.paths[0].path\''
+# #print(command)
+# subPrc = subprocess.Popen([command], shell=True, stdout = subprocess.PIPE)
+# k8sSvcName = str(subPrc.communicate()[0].decode("utf-8"))
+# arr = k8sSvcName.split("\n")
+# arr = arr[0:len(arr)-1]
+# #print(len(arr))
+
+# albDicc = dict()
+
+
+# if(albDicc.get(alb)== None and len(arr)>0):
+#     albDicc[alb] = dict()
+#     counter = 0
+#     while True:
+#         albDicc[alb][trimAndRemoveDoubleQuotes(arr[counter+1])] = trimAndRemoveDoubleQuotes(arr[counter])
+#         counter=counter+2
+#         if(counter>=len(arr)):
+#             break
+# #print(albDicc)
+
+
+# for k in albDicc[alb].keys():
+#     match_pattern = 'http://host'+k
+#     match = urlmatch(match_pattern, 'http://host'+routePath)
+#     print(match_pattern + " | " + "http://host" + routePath+"-->"+str(match))
+#     if(not match and not routePath.endswith("/")):
+#         tempRoutePath=routePath+"/"
+#         match = urlmatch(match_pattern, 'http://host'+tempRoutePath)
+#         print(match_pattern + " | " + "http://host" + tempRoutePath+"-->"+str(match))
+#     if(match):
+#         print("Found!! service name: "+albDicc[alb][k])
+#         break
+#     print("--")
+
+
+
 
 
 def downloadJson(url, filename):
@@ -21,16 +65,14 @@ def downloadJson(url, filename):
     subPrc = subprocess.Popen(['rm '+serviceFileTemp ], shell=True) 
     subPrc.communicate()
 
-def trimAndRemoveDoubleQuotes(string):
-    string=string.lstrip().rstrip()
-    string=string[1:len(string)-1]
-    return string
+
 
 bufsize = 1
 myFile = open('summary.csv', 'w', buffering=bufsize)
 csvSeparator = ","
 
 def genCSV(routesFileNames,servicesFileNames, ingressFileName):
+    albDicc = dict()
 
     myFile.write("Route ID"+csvSeparator)
     myFile.write("Route path"+csvSeparator)
@@ -42,7 +84,8 @@ def genCSV(routesFileNames,servicesFileNames, ingressFileName):
     myFile.write("k8sSvcName"+csvSeparator)
     myFile.write("k8sNameSpace"+csvSeparator)
     myFile.write("selectorApp"+csvSeparator)
-    myFile.write("k8sDeployName\n")
+    myFile.write("k8sDeployName"+csvSeparator)
+    myFile.write("dicc_text\n")
     
     for routesFileName in routesFileNames:
         print(routesFileName)
@@ -54,6 +97,11 @@ def genCSV(routesFileNames,servicesFileNames, ingressFileName):
         for routeId in routeIdArray:
             if(len(routeId)==0):
                 continue
+            
+            routeId=trimAndRemoveDoubleQuotes(routeId)
+            
+            if(routeId != "2663a1d5-ba83-4125-abfd-591fd96f83e5"):
+                continue
             path=""
             svcId=""
             svcUpPath=""
@@ -63,10 +111,13 @@ def genCSV(routesFileNames,servicesFileNames, ingressFileName):
             k8sSvcName=""
             k8sNameSpace=""
             selectorApp=""
-            k8sDeployName=""            
+            k8sDeployName=""     
+            dicc_text="" 
         
-            routeId=trimAndRemoveDoubleQuotes(routeId)
+            
 
+            if(routeId=="0d09efb7-2be6-48ec-85ae-3f9f5d0531e3"):
+                print("1")
             #---------------------------
             # Busca route PATH
             #---------------------------
@@ -136,124 +187,108 @@ def genCSV(routesFileNames,servicesFileNames, ingressFileName):
                 albDNS = trimAndRemoveDoubleQuotes(albDNS)
                 print("ALB DNS: "+ albDNS)
                 
-                if(True):
-                    myFile.write(routeId+csvSeparator)
-                    myFile.write(path+csvSeparator)
-                    myFile.write(svcName+csvSeparator)
-                    myFile.write(svcId+csvSeparator)
-                    myFile.write(svcUpPath+csvSeparator)
-                    myFile.write(svcPlugins+csvSeparator)
-                    myFile.write(albDNS+csvSeparator)
-                    myFile.write(k8sSvcName+csvSeparator)
-                    myFile.write(k8sNameSpace+csvSeparator)
-                    myFile.write(selectorApp+csvSeparator)
-                    myFile.write(k8sDeployName)
-                    myFile.write("\n")
-
-                    path=""
-                    routeId=""
-                    kongSvcName=""
-                    svcId=""
-                    svcUpPath=""
-                    svcPlugins=""
-                    albDNS=""
-                    svcName=""
-                    k8sSvcName=""
-                    k8sNameSpace=""
-                    selectorApp=""
-                    k8sDeployName=""
-                    continue
-                
+               
 
                 # no es una IP?
-                if(re.match("[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+",albDNS) is None):
+                if(re.match("[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+",albDNS) is None and albDNS.endswith("amazonaws.com")):
 
-                    path1=""
-                    path2=""
-                    path3=""
-                    path4=""
-
-                    if(svcUpPath.endswith("/")):
-                        path1=svcUpPath
-                        path2=svcUpPath+"*"
-                        path3=svcUpPath+"*"
-                        path4=svcUpPath
-                    else:
-                        path1=svcUpPath
-                        path2=svcUpPath+"*"
-                        path3=svcUpPath+"/*"
-                        path4=svcUpPath+"/"
-                    print("\t"+path1)
-                    print("\t"+path2)
-                    print("\t"+path3)
-                    print("\t"+path4)
-                    
                     #---------------------------------
                     # Busca k8s svc name
                     #---------------------------------
+
                     
-                    command = 'jq \'.items[] | select ( .status.loadBalancer.ingress[].hostname == "'+albDNS+'" )\' '+ingressFileName+' | jq \'.spec.rules[].http.paths[0].backend.service.name\''
-                    print(command)
+                    routePath = path
+                    command = 'jq \'.items[] | select ( .status.loadBalancer.ingress[].hostname == "'+albDNS+'" )\' k8s-ingress.json | jq \'.spec.rules[].http.paths[0].backend.service.name , .spec.rules[].http.paths[0].path\''
+                    #print(command)
                     subPrc = subprocess.Popen([command], shell=True, stdout = subprocess.PIPE)
-                    k8sSvcName = str(subPrc.communicate()[0].decode("utf-8"))
-                    k8sSvcName = trimAndRemoveDoubleQuotes(k8sSvcName)
-                    print("K8S-Service NAME(s): "+ k8sSvcName)
-                    
-                    match_pattern = 'http://host/api/container/*'
-                    print(urlmatch(match_pattern, 'http://host/api/container/core/v1/'))
+                    temp1 = str(subPrc.communicate()[0].decode("utf-8"))
+                    arr = temp1.split("\n")
+                    arr = arr[0:len(arr)-1]
 
-                    if(True):
-                        quit()
-                    
-                    #----------------------------------------------
-                    # Busca k8s svc nameSpace asociado al ingress
-                    #----------------------------------------------
-                    subPrc = subprocess.Popen(['jq \'.items[] | select ( .status.loadBalancer.ingress[].hostname == "'+albDNS+
-                            '")\' '+ ingressFileName+' | jq \'.metadata.namespace\''], shell=True, stdout = subprocess.PIPE) 
-                    
-                    k8sNameSpace = str(subPrc.communicate()[0].decode("utf-8"))
-                    k8sNameSpace = trimAndRemoveDoubleQuotes(k8sNameSpace)
-                    print("K8S-Namespace: "+ k8sNameSpace)
-                    
+                    if(len(arr)>0):
 
-                    #----------------------------------------------
-                    # Busca k8s svc selectorApp
-                    #----------------------------------------------
+                        if(albDicc.get(albDNS)== None and len(arr)>0):
+                            albDicc[albDNS] = dict()
+                            counter = 0
+                            while True:
+                                albDicc[albDNS][trimAndRemoveDoubleQuotes(arr[counter+1])] = trimAndRemoveDoubleQuotes(arr[counter])
+                                counter=counter+2
+                                if(counter>=len(arr)):
+                                    break
+                        #print(albDicc)
 
-                    selectorApp=""
-                    if(len(k8sSvcName) > 0 and len(k8sNameSpace)>0):
-                        subPrc = subprocess.Popen(['kubectl get svc "'+k8sSvcName+'" -n "'+k8sNameSpace+'" -o json \ jq \'.spec.selector.app\''], shell=True, stdout = subprocess.PIPE)
-                        selectorApp = str(subPrc.communicate()[0].decode("utf-8"))
-                        selectorApp = trimAndRemoveDoubleQuotes(selectorApp)
-                    
-                    print("K8S-selectorApp: "+ selectorApp)
-                    
-                    
+                        match = False
+                        k8sSvcName="non match"
+                        dicc_text=str(albDicc[albDNS])
+                        dicc_text=dicc_text.replace(",",";")
+                        for k in albDicc[albDNS].keys():
+                            match_pattern = 'http://host'+k
+                            match = urlmatch(match_pattern, 'http://host'+routePath)
+                            #print(match_pattern + " | " + "http://host" + routePath+"-->"+str(match))
+                            if(not match and not routePath.endswith("/")):
+                                tempRoutePath=routePath+"/"
+                                match = urlmatch(match_pattern, 'http://host'+tempRoutePath)
+                                #print(match_pattern + " | " + "http://host" + tempRoutePath+"-->"+str(match))
+                            if(match):
+                                print("Found!! service name: "+albDicc[albDNS][k])
+                                k8sSvcName=albDicc[albDNS][k]
+                                break
 
-                    k8sDeployName=""
-                    if(len(selectorApp) > 0):
-                        #----------------------------------------------
-                        # Busca k8s deployment name
-                        #----------------------------------------------
-                        subPrc = subprocess.Popen(['kubectl get deploy -n "'+k8sNameSpace+'" -o json | jq \'.items[] | select(.spec.template.metadata.labels.app == '+selectorApp+' )\' | jq \'.metadata.name\' '], shell=True, stdout = subprocess.PIPE) 
-                        k8sDeployName = str(subPrc.communicate()[0].decode("utf-8"))
-                        k8sDeployName = trimAndRemoveDoubleQuotes(k8sDeployName)
-                    print("K8S-deployName: "+ k8sDeployName)
+                        #assert(match)
+                        if(match):
+                            #----------------------------------------------
+                            # Busca k8s svc nameSpace asociado al ingress
+                            #----------------------------------------------
+                            subPrc = subprocess.Popen(['jq \'.items[] | select ( .spec.rules[].http.paths[].backend.service.name == "'+k8sSvcName+
+                                    '")\' '+ ingressFileName+' | jq \'.metadata.namespace\''], shell=True, stdout = subprocess.PIPE) 
+                            
+                            k8sNameSpace = str(subPrc.communicate()[0].decode("utf-8"))
+                            k8sNameSpace.replace("\"","")
+                            if(k8sNameSpace.find("\n")):
+                                k8sNameSpace=k8sNameSpace.split("\n")
+                                k8sNameSpace = trimAndRemoveDoubleQuotes(k8sNameSpace[0])
 
-                    print("------")
+                            print("K8S-Namespace: "+ k8sNameSpace)
+
+                            
+                            
+
+                            #----------------------------------------------
+                            # Busca k8s svc selectorApp
+                            #----------------------------------------------
+
+                            if(len(k8sSvcName) > 0 and len(k8sNameSpace)>0):
+                                subPrc = subprocess.Popen(['kubectl get svc '+k8sSvcName+' -n '+k8sNameSpace+' -o json | jq \'.spec.selector.app\''], shell=True, stdout = subprocess.PIPE)
+                                selectorApp = str(subPrc.communicate()[0].decode("utf-8"))
+                                selectorApp = trimAndRemoveDoubleQuotes(selectorApp)
+                            
+                            print("K8S-selectorApp: "+ selectorApp)
+                            
+                            
+
+                            if(len(selectorApp) > 0):
+                                #----------------------------------------------
+                                # Busca k8s deployment name
+                                #----------------------------------------------
+                                subPrc = subprocess.Popen(['kubectl get deploy -n '+k8sNameSpace+' -o json | jq \'.items[] | select(.spec.template.metadata.labels.app == "'+selectorApp+'" )\' | jq \'.metadata.name\' '], shell=True, stdout = subprocess.PIPE) 
+                                k8sDeployName = str(subPrc.communicate()[0].decode("utf-8"))
+                                k8sDeployName = trimAndRemoveDoubleQuotes(k8sDeployName)
+                            print("K8S-deployName: "+ k8sDeployName)
+
+                            print("------")
                     
-            # fin de una iteracion
-            myFile.write(routeId+csvSeparator)
-            myFile.write(path+csvSeparator)
-            myFile.write(svcName+csvSeparator)
-            myFile.write(svcId+csvSeparator)
-            myFile.write(svcUpPath+csvSeparator)
-            myFile.write(svcPlugins+csvSeparator)
-            myFile.write(albDNS+csvSeparator)
-            myFile.write(k8sSvcName+csvSeparator)
-            myFile.write(k8sNameSpace+csvSeparator)
-            myFile.write(selectorApp+csvSeparator)
-            myFile.write(k8sDeployName)
+            myFile.write( ( routeId ) +csvSeparator)
+            myFile.write(( path )+csvSeparator)
+            myFile.write(( svcName )+csvSeparator)
+            myFile.write(( svcId )+csvSeparator)
+            myFile.write(( svcUpPath )+csvSeparator)
+            myFile.write(( svcPlugins )+csvSeparator)
+            myFile.write(( albDNS  )+csvSeparator)
+            myFile.write(( k8sSvcName  )+csvSeparator)
+            myFile.write(( k8sNameSpace )+csvSeparator)
+            myFile.write(( selectorApp  )+csvSeparator)
+            myFile.write(( k8sDeployName )+csvSeparator)
+            myFile.write(( dicc_text ))
             myFile.write("\n")
 
             path=""
@@ -267,7 +302,7 @@ def genCSV(routesFileNames,servicesFileNames, ingressFileName):
             k8sSvcName=""
             k8sNameSpace=""
             selectorApp=""
-            k8sDeployName=""
+            dicc_text=""
 
     myFile.close()
 
@@ -293,7 +328,7 @@ print(nextToken)
 if(len(nextToken)>10):
     downloadJson("http://"+host_port_kong+nextToken, serviceFile2)
 
-#  Descargar json de routes kong
+# #  Descargar json de routes kong
 
 
 
@@ -308,9 +343,9 @@ print(nextToken)
 if(len(nextToken)>10):
     downloadJson("http://"+host_port_kong+nextToken, routeFile2)
 
-#  Descargar json de ingress
-subPrc = subprocess.Popen(['k8s-desa'] , shell=True) 
-subPrc = subprocess.Popen(['kubectl get ingress -A -o json > '+ingressFile] , shell=True) 
+# Descargar json de ingress
+# subPrc = subprocess.Popen(['k8s-desa'] , shell=True) 
+# subPrc = subprocess.Popen(['kubectl get ingress -A -o json > '+ingressFile] , shell=True) 
 
 routesFileNames = [routeFile1,routeFile2]
 servicesFileNames = [serviceFile1,serviceFile2]
