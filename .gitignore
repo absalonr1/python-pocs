@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 *.json
 *.csv
+*.xlsx
 .DS_Store
 
 # C extensions

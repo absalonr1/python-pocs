@@ -62,7 +62,7 @@ albDicc = dict()
 
 def getK8sSvcName(albDNS,ingressFile,svcUpPath):
     k8sSvcName = ""
-
+    dicc_text = ""
     command = 'jq \'.items[] | select ( .status.loadBalancer.ingress[].hostname == "' + albDNS + '" )\' '+ingressFile+' | jq \'.spec.rules[].http.paths[0].backend.service.name , .spec.rules[].http.paths[0].path\''
     # print(command)
     subPrc = subprocess.Popen([command], shell=True, stdout=subprocess.PIPE)
@@ -99,7 +99,7 @@ def getK8sSvcName(albDNS,ingressFile,svcUpPath):
                 print("Found!! service name: " + albDicc[albDNS][k])
                 k8sSvcName = albDicc[albDNS][k]
                 break
-    return k8sSvcName
+    return k8sSvcName,dicc_text
 
 
 def getKongSvcHost(servicesFileName, svcId):
@@ -201,8 +201,8 @@ def genCSV(routesFileNames, servicesFileNames, ingressFileName):
 
             routeId = trimAndRemoveDoubleQuotes(routeId)
 
-            if (routeId != "0d246c5d-5395-4147-aa7a-86fc102b275a"):
-                continue
+            if (routeId != "a9cae54e-0518-4f7c-930f-2454c09e366a"):
+                pass
             path = ""
             svcId = ""
             svcUpPath = ""
@@ -235,7 +235,7 @@ def genCSV(routesFileNames, servicesFileNames, ingressFileName):
                 # no es una IP?
                 if (re.match("[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+", albDNS) is None and albDNS.endswith("amazonaws.com")):
 
-                    k8sSvcName = getK8sSvcName(albDNS, ingressFileName,svcUpPath)
+                    k8sSvcName, dicc_text = getK8sSvcName(albDNS, ingressFileName,svcUpPath)
 
                     if (len(k8sSvcName) > 0):
 
@@ -305,20 +305,24 @@ url = "http://"+host_port_kong+"/services"
 
 
 
-# url = "http://"+host_port_kong+"/routes"
-# downloadJson(url,routeFile1)
-# subPrc = subprocess.Popen(['jq','.next',routeFile1] , stdout = subprocess.PIPE) 
-# nextToken = str(subPrc.communicate()[0].decode("utf-8"))
-# nextToken=nextToken.lstrip().rstrip()
-# nextToken=nextToken[1:len(nextToken)-1]
-# print(nextToken)
+url = "http://"+host_port_kong+"/routes"
+downloadJson(url,routeFile1)
+subPrc = subprocess.Popen(['jq','.next',routeFile1] , stdout = subprocess.PIPE) 
+nextToken = str(subPrc.communicate()[0].decode("utf-8"))
+nextToken=nextToken.lstrip().rstrip()
+nextToken=nextToken[1:len(nextToken)-1]
+print(nextToken)
 
-# if(len(nextToken)>10):
-#     downloadJson("http://"+host_port_kong+nextToken, routeFile2)
+if(len(nextToken)>10):
+    downloadJson("http://"+host_port_kong+nextToken, routeFile2)
 
 # #Descargar json de ingress
-# subPrc = subprocess.Popen(['k8s-desa'] , shell=True) 
-# subPrc = subprocess.Popen(['kubectl get ingress -A -o json > '+ingressFile] , shell=True) 
+# subPrc = subprocess.Popen(['k8s-desa'] , shell=True,stdout = subprocess.PIPE) 
+# out = str(subPrc.communicate()[0].decode("utf-8"))
+# print(out)
+# subPrc = subprocess.Popen(['kubectl get ingress -A -o json > '+ingressFile] , shell=True, stdout = subprocess.PIPE) 
+# out = str(subPrc.communicate()[0].decode("utf-8"))
+# print(out)
 
 routesFileNames = [routeFile1,routeFile2]
 servicesFileNames = [serviceFile1,serviceFile2]
