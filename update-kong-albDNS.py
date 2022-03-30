@@ -3,7 +3,7 @@ import subprocess
 from urlmatch import urlmatch
 
 def parchar(serviceId,newDNS):
-    patchService = "curl -i -X PATCH http://localhost:8001/services/"+serviceId
+    patchService = "curl -i -s -X PATCH http://localhost:8001/services/"+serviceId
     patchService += " --data \"host="+newDNS+"\""
     subPrc = subprocess.Popen([patchService],shell=True, stdout=subprocess.PIPE)
     out = str(subPrc.communicate()[0].decode("utf-8"))
@@ -28,12 +28,6 @@ kongSvcDic = {
     "bf7eea1f-6d63-4185-8ec8-0286c9dfc63d":["/a/b","dns-new.test.cl"],
     "99d0f78a-4857-4423-b6f5-01b2122b827e":["/o/p/q","host.deleteme333"]
 }
-# for k in kongSvcDic:
-#     print(kongSvcDic[k][0])
-#     print(kongSvcDic[k][1])
-
-# if(True):
-#     quit()
 
 # itero por casa Ingress (path/dns)
 with open('test.csv') as csv_file:
@@ -60,30 +54,3 @@ with open('test.csv') as csv_file:
             print(ingressPath+" Not patched")
         else:
             print("[ "+serviceId + " --> " + servicePath + " ] patched with: [" + newDNS + ", match: "+ingressPath+"]")
-
-
-
-
-# ingressPath=""
-# servicePath=""
-
-
-
-# host="dns-new.test.cl"
-# svcId="bf7eea1f-6d63-4185-8ec8-0286c9dfc63d"
-# patchService = "curl -i -X PATCH http://localhost:8001/services/"+svcId
-# patchService += " --data \"host="+host+"\""
-
-# subPrc = subprocess.Popen([patchService],shell=True, stdout=subprocess.PIPE)
-# out = str(subPrc.communicate()[0].decode("utf-8"))
-# flagPatched=False
-# out = out.split("\n")
-# for item in out:
-#     print(item+"\n")
-#     if(item.startswith("HTTP/1.1 ")):
-#         if(item.find("200")):
-#             flagPatched=True
-#             print("patched OK")
-#             break
-# if(not flagPatched):
-#     print("patched NO OK!!")
