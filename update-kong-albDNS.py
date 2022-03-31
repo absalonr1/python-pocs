@@ -24,10 +24,18 @@ def parchar(serviceId,newDNS):
 #http://localhost:8899/#/services/99d0f78a-4857-4423-b6f5-01b2122b827e
 
 kongSvcDic = dict()
-kongSvcDic = {
-    "bf7eea1f-6d63-4185-8ec8-0286c9dfc63d":["/a/b","dns-new.test.cl"],
-    "99d0f78a-4857-4423-b6f5-01b2122b827e":["/o/p/q","host.deleteme333"]
-}
+# kongSvcDic = {
+#     "bf7eea1f-6d63-4185-8ec8-0286c9dfc63d":["/a/b","dns-new.test.cl"],
+#     "99d0f78a-4857-4423-b6f5-01b2122b827e":["/o/p/q","host.deleteme333"]
+# }
+
+with open('summary-services-prod.csv') as csvFile:
+    csvReader = csv.reader(csvFile, delimiter=',')
+    for row in csvReader:
+        kongSvcDic[row[0]]= [row[1],row[2]]
+
+# if(True):
+#     quit()
 
 # itero por casa Ingress (path/dns)
 with open('test.csv') as csv_file:
@@ -51,6 +59,6 @@ with open('test.csv') as csv_file:
                 flagServicePatched = parchar(serviceId,newDNS)
                 break
         if(not flagServicePatched):
-            print(ingressPath+" Not patched")
+            print("["+ingressPath+"] Not patched")
         else:
             print("[ "+serviceId + " --> " + servicePath + " ] patched with: [" + newDNS + ", match: "+ingressPath+"]")
