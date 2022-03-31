@@ -29,6 +29,7 @@ kongSvcDic = dict()
 #     "99d0f78a-4857-4423-b6f5-01b2122b827e":["/o/p/q","host.deleteme333"]
 # }
 
+# jq '.data[] | .id + "," + .path + "," + .host' services-prod.json > summary-services-prod.csv
 with open('summary-services-prod.csv') as csvFile:
     csvReader = csv.reader(csvFile, delimiter=',')
     for row in csvReader:
