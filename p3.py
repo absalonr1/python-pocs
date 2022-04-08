@@ -63,7 +63,7 @@ albDicc = dict()
 def getK8sSvcName(albDNS,ingressFile,svcUpPath):
     k8sSvcName = ""
     dicc_text = ""
-    command = 'jq \'.items[] | select ( .status.loadBalancer.ingress[].hostname == "' + albDNS + '" )\' '+ingressFile+' | jq \'.spec.rules[].http.paths[0].backend.service.name , .spec.rules[].http.paths[0].path\''
+    command = 'jq \'.items[] | select ( .status.loadBalancer.ingress[]?.hostname == "' + albDNS + '" )\' '+ingressFile+' | jq \'.spec.rules[].http.paths[0].backend.service.name , .spec.rules[].http.paths[0].path\''
     # print(command)
     subPrc = subprocess.Popen([command], shell=True, stdout=subprocess.PIPE)
     temp1 = str(subPrc.communicate()[0].decode("utf-8"))
@@ -288,7 +288,8 @@ ingressFile = "k8s-ingress.json"
 routeFile1 = "kong-routes.json"
 routeFile2 = "kong-routes-next.json"
 
-
+routesFileNames = [routeFile1,routeFile2]
+servicesFileNames = [serviceFile1,serviceFile2]
 
 url = "http://"+host_port_kong+"/services"
 downloadJson(url,serviceFile1)
@@ -300,6 +301,8 @@ print(nextToken)
 
 if(len(nextToken)>10):
     downloadJson("http://"+host_port_kong+nextToken, serviceFile2)
+else:
+    servicesFileNames=servicesFileNames[0:1]
 
 # #  Descargar json de routes kong
 
@@ -315,6 +318,8 @@ print(nextToken)
 
 if(len(nextToken)>10):
     downloadJson("http://"+host_port_kong+nextToken, routeFile2)
+else:
+    routesFileNames=routesFileNames[0:1]
 
 # #Descargar json de ingress
 k8sProd="kubectl config use-context arn:aws:eks:us-east-1:772932014686:cluster/eksprod01 && export AWS_PROFILE=default"
@@ -327,8 +332,7 @@ subPrc = subprocess.Popen(['kubectl get ingress -A -o json > '+ingressFile] , sh
 out = str(subPrc.communicate()[0].decode("utf-8"))
 print(out)
 
-routesFileNames = [routeFile1,routeFile2]
-servicesFileNames = [serviceFile1,serviceFile2]
+
 # generar Excel
 genCSV(ingressFileName=ingressFile, routesFileNames=routesFileNames,servicesFileNames=servicesFileNames)
 
