@@ -291,17 +291,17 @@ routeFile2 = "kong-routes-next.json"
 
 
 url = "http://"+host_port_kong+"/services"
-# downloadJson(url,serviceFile1)
-# subPrc = subprocess.Popen(['jq','.next',serviceFile1] , stdout = subprocess.PIPE) 
-# nextToken = str(subPrc.communicate()[0].decode("utf-8"))
-# nextToken=nextToken.lstrip().rstrip()
-# nextToken=nextToken[1:len(nextToken)-1]
-# print(nextToken)
+downloadJson(url,serviceFile1)
+subPrc = subprocess.Popen(['jq','.next',serviceFile1] , stdout = subprocess.PIPE) 
+nextToken = str(subPrc.communicate()[0].decode("utf-8"))
+nextToken=nextToken.lstrip().rstrip()
+nextToken=nextToken[1:len(nextToken)-1]
+print(nextToken)
 
-# if(len(nextToken)>10):
-#     downloadJson("http://"+host_port_kong+nextToken, serviceFile2)
+if(len(nextToken)>10):
+    downloadJson("http://"+host_port_kong+nextToken, serviceFile2)
 
-# # #  Descargar json de routes kong
+# #  Descargar json de routes kong
 
 
 
@@ -317,12 +317,15 @@ if(len(nextToken)>10):
     downloadJson("http://"+host_port_kong+nextToken, routeFile2)
 
 # #Descargar json de ingress
-# subPrc = subprocess.Popen(['k8s-desa'] , shell=True,stdout = subprocess.PIPE) 
-# out = str(subPrc.communicate()[0].decode("utf-8"))
-# print(out)
-# subPrc = subprocess.Popen(['kubectl get ingress -A -o json > '+ingressFile] , shell=True, stdout = subprocess.PIPE) 
-# out = str(subPrc.communicate()[0].decode("utf-8"))
-# print(out)
+k8sProd="kubectl config use-context arn:aws:eks:us-east-1:772932014686:cluster/eksprod01 && export AWS_PROFILE=default"
+k8sDesa="kubectl config use-context arn:aws:eks:us-west-2:311028179126:cluster/ekslab06 && export AWS_PROFILE=bx-dev"
+k8sQa="kubectl config use-context arn:aws:eks:us-east-1:598597004437:cluster/eksqa012 && export AWS_PROFILE=bx-qa"
+subPrc = subprocess.Popen([k8sQa] , shell=True,stdout = subprocess.PIPE) 
+out = str(subPrc.communicate()[0].decode("utf-8"))
+print(out)
+subPrc = subprocess.Popen(['kubectl get ingress -A -o json > '+ingressFile] , shell=True, stdout = subprocess.PIPE) 
+out = str(subPrc.communicate()[0].decode("utf-8"))
+print(out)
 
 routesFileNames = [routeFile1,routeFile2]
 servicesFileNames = [serviceFile1,serviceFile2]
