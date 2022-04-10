@@ -3,6 +3,7 @@ from urlmatch import urlmatch
 from asyncore import write
 import subprocess
 import re
+import sys
 
 # python3 -m pip install requests
 import requests
@@ -275,18 +276,26 @@ def genCSV(routesFileNames, servicesFileNames, ingressFileName):
 
     myFile.close()
 
+
 host_port_kong = "localhost:8001"
+
+
+if(not (sys.argv[1] == "prod" or sys.argv[1] == "qa" or sys.argv[1] == "dev")):
+    print("Parmetro debe ser [prod|qa|dev]")
+    quit()
+
+
 bufsize = 1
-myFile = open('summary.csv', 'w', buffering=bufsize)
+myFile = open('summary_'+sys.argv[1]+'.csv', 'w', buffering=bufsize)
 csvSeparator = ","
 
 
 #  Descargar json de servicios kong
-serviceFile1 = "kong-services.json"
-serviceFile2 = "kong-services-next.json"
-ingressFile = "k8s-ingress.json"
-routeFile1 = "kong-routes.json"
-routeFile2 = "kong-routes-next.json"
+serviceFile1 = "kong-services-"+sys.argv[1]+".json"
+serviceFile2 = "kong-services-next-"+sys.argv[1]+".json"
+ingressFile = "k8s-ingress-"+sys.argv[1]+".json"
+routeFile1 = "kong-routes-"+sys.argv[1]+".json"
+routeFile2 = "kong-routes-next-"+sys.argv[1]+".json"
 
 routesFileNames = [routeFile1,routeFile2]
 servicesFileNames = [serviceFile1,serviceFile2]
@@ -325,7 +334,16 @@ else:
 k8sProd="kubectl config use-context arn:aws:eks:us-east-1:772932014686:cluster/eksprod01 && export AWS_PROFILE=default"
 k8sDesa="kubectl config use-context arn:aws:eks:us-west-2:311028179126:cluster/ekslab06 && export AWS_PROFILE=bx-dev"
 k8sQa="kubectl config use-context arn:aws:eks:us-east-1:598597004437:cluster/eksqa012 && export AWS_PROFILE=bx-qa"
-subPrc = subprocess.Popen([k8sQa] , shell=True,stdout = subprocess.PIPE) 
+
+clusterConf=""
+if(sys.argv[1] == "prod"):
+    clusterConf=k8sProd
+if(sys.argv[1] == "qa"):
+    clusterConf=k8sQa
+if(sys.argv[1] == "dev"):
+    clusterConf=k8sDesa
+
+subPrc = subprocess.Popen([clusterConf] , shell=True,stdout = subprocess.PIPE) 
 out = str(subPrc.communicate()[0].decode("utf-8"))
 print(out)
 subPrc = subprocess.Popen(['kubectl get ingress -A -o json > '+ingressFile] , shell=True, stdout = subprocess.PIPE) 
