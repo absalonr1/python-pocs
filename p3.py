@@ -64,12 +64,26 @@ albDicc = dict()
 def getK8sSvcName(albDNS,ingressFile,svcUpPath):
     k8sSvcName = ""
     dicc_text = ""
+    #TODO: jq -r '.items[] | select ( .status.loadBalancer.ingress[]?.hostname == "internal-k8s-ingrztmsuniversal-479f7c3508-1353133394.us-west-2.elb.amazonaws.com" )' k8s-ingress-dev.json | jq '.spec.rules[].http.paths[0].backend.service.name +","+ .spec.rules[].http.paths[0].path +","+ .metadata.name'
+
     command = 'jq \'.items[] | select ( .status.loadBalancer.ingress[]?.hostname == "' + albDNS + '" )\' '+ingressFile+' | jq \'.spec.rules[].http.paths[0].backend.service.name , .spec.rules[].http.paths[0].path\''
     # print(command)
     subPrc = subprocess.Popen([command], shell=True, stdout=subprocess.PIPE)
     temp1 = str(subPrc.communicate()[0].decode("utf-8"))
     arr = temp1.split("\n")
     arr = arr[0:len(arr) - 1]
+    
+    """
+    albDicc:
+        DNS1
+         |__ path1:srv-name1
+         |__ path2:srv-name2
+        DNS2
+         |__ path3:srv-name3
+         |__ path4:srv-name4
+    """
+
+
     if (len(arr) > 0):
 
         if (albDicc.get(albDNS) == None and len(arr) > 0):
@@ -276,26 +290,45 @@ def genCSV(routesFileNames, servicesFileNames, ingressFileName):
 
     myFile.close()
 
+env_suffix="dev"
+if(len(sys.argv)>1):
+    if(sys.argv[1] == "prod"):
+        env_suffix="prod"
+    elif(sys.argv[1] == "qa"):
+        env_suffix="qa"
+    elif(sys.argv[1] == "dev"):
+        env_suffix="dev"
+
+env_suffix="dev"
+if(len(sys.argv)>1):
+    if(sys.argv[1] == "prod"):
+        env_suffix="prod"
+    elif(sys.argv[1] == "qa"):
+        env_suffix="qa"
+    elif(sys.argv[1] == "dev"):
+        env_suffix="dev"
 
 host_port_kong = "localhost:8001"
 
-
-if(not (sys.argv[1] == "prod" or sys.argv[1] == "qa" or sys.argv[1] == "dev")):
-    print("Parmetro debe ser [prod|qa|dev]")
-    quit()
+if(len(sys.argv)>1):
+    if(not (sys.argv[1] == "prod" or sys.argv[1] == "qa" or sys.argv[1] == "dev")):
+        print("Parmetro debe ser [prod|qa|dev]")
+        quit()
 
 
 bufsize = 1
-myFile = open('summary_'+sys.argv[1]+'.csv', 'w', buffering=bufsize)
+myFile = open('summary_'+env_suffix+'.csv', 'w', buffering=bufsize)
 csvSeparator = ","
 
 
 #  Descargar json de servicios kong
-serviceFile1 = "kong-services-"+sys.argv[1]+".json"
-serviceFile2 = "kong-services-next-"+sys.argv[1]+".json"
-ingressFile = "k8s-ingress-"+sys.argv[1]+".json"
-routeFile1 = "kong-routes-"+sys.argv[1]+".json"
-routeFile2 = "kong-routes-next-"+sys.argv[1]+".json"
+
+
+serviceFile1 = "kong-services-"+env_suffix+".json"
+serviceFile2 = "kong-services-next-"+env_suffix+".json"
+ingressFile = "k8s-ingress-"+env_suffix+".json"
+routeFile1 = "kong-routes-"+env_suffix+".json"
+routeFile2 = "kong-routes-next-"+env_suffix+".json"
 
 routesFileNames = [routeFile1,routeFile2]
 servicesFileNames = [serviceFile1,serviceFile2]
@@ -335,13 +368,14 @@ k8sProd="kubectl config use-context arn:aws:eks:us-east-1:772932014686:cluster/e
 k8sDesa="kubectl config use-context arn:aws:eks:us-west-2:311028179126:cluster/ekslab06 && export AWS_PROFILE=bx-dev"
 k8sQa="kubectl config use-context arn:aws:eks:us-east-1:598597004437:cluster/eksqa012 && export AWS_PROFILE=bx-qa"
 
-clusterConf=""
-if(sys.argv[1] == "prod"):
-    clusterConf=k8sProd
-if(sys.argv[1] == "qa"):
-    clusterConf=k8sQa
-if(sys.argv[1] == "dev"):
-    clusterConf=k8sDesa
+clusterConf=k8sDesa
+if(len(sys.argv)>1):
+    if(sys.argv[1] == "prod"):
+        clusterConf=k8sProd
+    elif(sys.argv[1] == "qa"):
+        clusterConf=k8sQa
+    elif(sys.argv[1] == "dev"):
+        clusterConf=k8sDesa
 
 subPrc = subprocess.Popen([clusterConf] , shell=True,stdout = subprocess.PIPE) 
 out = str(subPrc.communicate()[0].decode("utf-8"))
